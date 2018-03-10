@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import json
 import random
 
@@ -10,8 +12,15 @@ class DiseaseSpider(scrapy.Spider):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        with open('disease.json') as data_file:
-            self.data = json.load(data_file)
+        with open('disease.json') as disease_file:
+            self.data = json.load(disease_file)
+        with open('disease_detail.json') as disease_detail_file:
+            crawled_data = json.load(disease_detail_file)
+            self.crawled = set()
+            for l_ in crawled_data:
+                for name in l_:
+                    self.crawled.add(name)
+        print(self.crawled)
 
     USER_AGENTS = [
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
@@ -58,6 +67,8 @@ class DiseaseSpider(scrapy.Spider):
         for d_ in self.data:
             for category in d_:
                 for disease, url in d_[category].items():
+                    if disease in self.crawled:
+                        continue
                     yield scrapy.Request(url=url, callback=self.parse, headers={
                         'User-Agent': random.choice(self.USER_AGENTS),
                     })
