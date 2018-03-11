@@ -37,7 +37,7 @@ class MedsInfoSpider(scrapy.Spider):
             for disease in d_:
                 meds = d_[disease]['meds']
                 for m_, u_ in meds.items():
-                    if m_ in self.crawled:
+                    if m_ in self.crawled or not u_:
                         continue
                     self.crawled.add(m_)
                     yield scrapy.Request(url=u_ + 'manual', callback=self.parse, headers={

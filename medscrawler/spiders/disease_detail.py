@@ -34,7 +34,7 @@ class DiseaseDetailSpider(scrapy.Spider):
         for d_ in self.data:
             for category in d_:
                 for disease, url in d_[category].items():
-                    if disease in self.crawled:
+                    if disease in self.crawled or not url:
                         continue
                     self.crawled.add(disease)
                     yield scrapy.Request(url=url, callback=self.parse, headers={

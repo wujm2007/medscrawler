@@ -39,6 +39,8 @@ class DiseaseInfoSpider(scrapy.Spider):
                     continue
                 self.crawled.add(disease)
                 url = d_[disease]['info']
+                if not url:
+                    continue
                 yield scrapy.Request(url=url, callback=self.parse, headers={
                     'Referer': self.referer,
                     'User-Agent': random.choice(self.USER_AGENTS),
@@ -60,6 +62,7 @@ class DiseaseInfoSpider(scrapy.Spider):
                 while i < len(trimmed) and not trimmed[i].endswith('：'):
                     l_.append(trimmed[i])
                     i += 1
+                l_ = l_ or ['']
                 parsed[c_[:-1]] = l_ if len(l_) > 1 else l_.pop()
 
         # 防止被反爬虫
