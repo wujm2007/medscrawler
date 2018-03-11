@@ -4,12 +4,14 @@ import json
 import random
 
 import scrapy
+from scrapy.utils.project import get_project_settings
 
 
 class DiseaseDetailSpider(scrapy.Spider):
     name = "disease_detail"
     host = 'http://ypk.39.net'
     referer = 'http://ypk.39.net/allcategory'
+    USER_AGENTS = get_project_settings().get('USER_AGENTS')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
