@@ -9,11 +9,12 @@ from sqlalchemy.orm import sessionmaker
 from config import db_config
 
 
-def create_engine(user, password, host, database, echo=True):
-    return _create_engine('postgresql://{user}:{password}@{host}/{database}'.format(
+def create_engine(user, password, host, port, database, echo=True):
+    return _create_engine('postgresql://{user}:{password}@{host}:{port}/{database}'.format(
         user=user,
         password=password,
         host=host,
+        port=port,
         database=database,
     ), echo=echo)
 

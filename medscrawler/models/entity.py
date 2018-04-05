@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column, Integer, text
 from sqlalchemy.ext.declarative import declarative_base
 
-from medscrawler.models import Session, engine
+from medscrawler.models import Session
 from medscrawler.utils.str import decamelize
 
 Base = declarative_base()
@@ -28,8 +28,16 @@ class Entity(Base, metaclass=AutoTableMeta):
         return mcs.query().all()
 
     @classmethod
-    def get(mcs, id_):
+    def get(mcs, id_: int):
         return mcs.query().filter(mcs.id == id_).first()
+
+    @classmethod
+    def mget(mcs, ids_: list):
+        subq = text('SELECT * FROM (VALUES {}) AS q (id_, order_)'.
+                    format(','.join(['({},{})'.format(id_, order_) for order_, id_ in enumerate(ids_)]))). \
+            columns(id_=Integer, order_=Integer). \
+            alias('il')
+        return mcs.query().join(subq, subq.c.id_ == mcs.id).order_by(subq.c.order_).all()
 
     @property
     def columns(self):
@@ -48,6 +56,3 @@ class Entity(Base, metaclass=AutoTableMeta):
                 '{} = {}'.format(k, v) for k, v in self.json_dict.items()
             )
         )
-
-
-Entity.metadata.create_all(engine)
