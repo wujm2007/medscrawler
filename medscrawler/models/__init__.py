@@ -3,12 +3,22 @@ from _threading_local import local
 from contextlib import contextmanager
 from inspect import signature
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine as _create_engine
 from sqlalchemy.orm import sessionmaker
 
 from config import db_config
 
-engine = create_engine('postgresql://{user}:{password}@{host}/{database}'.format(**db_config), echo=True)
+
+def create_engine(user, password, host, database, echo=True):
+    return _create_engine('postgresql://{user}:{password}@{host}/{database}'.format(
+        user=user,
+        password=password,
+        host=host,
+        database=database,
+    ), echo=echo)
+
+
+engine = create_engine(**db_config, echo=True)
 
 Session = sessionmaker(bind=engine)
 
