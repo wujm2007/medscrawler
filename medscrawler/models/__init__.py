@@ -1,12 +1,19 @@
 import functools
-from _threading_local import local
 from contextlib import contextmanager
-from inspect import signature
+from threading import local
 
-from sqlalchemy import create_engine as _create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import (
+    create_engine as _create_engine,
+    event,
+)
+from sqlalchemy.orm import (
+    Session as _Session,
+    sessionmaker as _sessionmaker,
+    scoped_session
+)
 
 from config import db_config
+from medscrawler.utils.func import arg2kwarg, inject_kwarg
 
 
 def create_engine(user, password, host, port, database, echo=True):
@@ -19,19 +26,37 @@ def create_engine(user, password, host, port, database, echo=True):
     ), echo=echo)
 
 
-engine = create_engine(**db_config, echo=True)
+db_engine = create_engine(**db_config, echo=True)
 
-Session = sessionmaker(bind=engine)
+
+def scoped_sessionmaker(engine):
+    class Session(_Session):
+        def after_commit(self, func):
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                kwargs = arg2kwarg(func, args, kwargs)
+                return func(**kwargs)
+
+            event.listens_for(self, 'after_commit', once=True)(wrapper)
+
+    return scoped_session(
+        _sessionmaker(
+            class_=Session,
+            bind=engine
+        )
+    )
+
+
+DBSession = scoped_sessionmaker(db_engine)
 
 _session_ctx = local()
 
 
 @contextmanager
-def __session_scope():
-    session = Session()
+def transaction(session=None):
+    session = session or DBSession()
     try:
         _session_ctx.in_transaction = True
-        _session_ctx.session = session
         yield session
         session.commit()
     except:
@@ -39,7 +64,6 @@ def __session_scope():
         raise
     finally:
         _session_ctx.in_transaction = False
-        _session_ctx.session = None
         session.close()
 
 
@@ -52,17 +76,14 @@ def transactional(func):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        sig = signature(func)
-        for arg, param in zip(args, sig.parameters):
-            kwargs[param] = arg
+        kwargs = arg2kwarg(func, args, kwargs)
+        session = DBSession()
         if not getattr(_session_ctx, 'in_transaction', False):
-            with __session_scope():
-                if 'session' in sig.parameters:
-                    kwargs['session'] = getattr(_session_ctx, 'session')
+            with transaction(session):
+                kwargs = inject_kwarg(func, kwargs, 'session', session)
                 return func(**kwargs)
         else:
-            if 'session' in sig.parameters:
-                kwargs['session'] = getattr(_session_ctx, 'session')
+            kwargs = inject_kwarg(func, kwargs, 'session', session)
             return func(**kwargs)
 
     return wrapper

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, text
 from sqlalchemy.ext.declarative import declarative_base
 
-from medscrawler.models import Session
+from medscrawler.models import DBSession
 from medscrawler.utils.str import decamelize
 
 Base = declarative_base()
@@ -21,7 +21,7 @@ class Entity(Base, metaclass=AutoTableMeta):
 
     @classmethod
     def query(mcs):
-        return Session().query(mcs)
+        return DBSession().query(mcs)
 
     @classmethod
     def all(mcs):
