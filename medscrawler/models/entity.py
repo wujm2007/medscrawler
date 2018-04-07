@@ -29,6 +29,13 @@ class Entity(Base, metaclass=AutoTableMeta):
         return DBSession().query(cls)
 
     @classmethod
+    def query_by_kwargs(cls, **kwargs):
+        q = DBSession().query(cls)
+        for k, v in kwargs.items():
+            q = q.filter(getattr(cls, k) == v)
+        return q
+
+    @classmethod
     def all(cls):
         return cls.query().all()
 
