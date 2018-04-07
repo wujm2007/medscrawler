@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, text
+from sqlalchemy import Column, Integer, text, UniqueConstraint
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.declarative import declarative_base
 
 from medscrawler.models import DBSession, db_engine
@@ -18,6 +19,15 @@ class AutoTableMeta(declarative_meta):
         super().__init__(classname, bases, dict_)
         if not dict_.get('__abstract__', False):
             self.metadata.tables[self.__tablename__].create(db_engine, checkfirst=True)
+
+    @property
+    def columns(self):
+        return [c.name for c in self.__table__.columns]
+
+    @property
+    def unique_keys(self):
+        table_args = getattr(self, '__table_args__', ())
+        return [tuple(a.name for a in ta.columns) for ta in table_args if isinstance(ta, UniqueConstraint)]
 
 
 class Entity(Base, metaclass=AutoTableMeta):
@@ -51,14 +61,46 @@ class Entity(Base, metaclass=AutoTableMeta):
             alias('il')
         return cls.query().join(il, il.c.id_ == cls.id).order_by(il.c.order_).all()
 
-    @property
-    def columns(self):
-        return [c.name for c in self.__table__.columns]
+    @classmethod
+    def add(cls, **kwargs):
+        attrs = {k: v for k, v in kwargs.items() if k in cls.columns}
+        instance = cls(**attrs)
+        DBSession().add(instance)
+        DBSession().flush()
+        return instance
+
+    def update(self, **kwargs):
+        cls = type(self)
+        attrs = {k: v for k, v in kwargs.items() if k in cls.columns}
+        for k, v in attrs.items():
+            setattr(self, k, v)
+        DBSession().add(self)
+        DBSession().flush()
+        return self
+
+    @classmethod
+    def upsert(cls, **kwargs):
+        attrs = {k: v for k, v in kwargs.items() if k in cls.columns}
+
+        for unique_keys in cls.unique_keys:
+            if set(unique_keys) < set(attrs.keys()):
+                upsert_keys = unique_keys
+                break
+        else:
+            raise AttributeError
+
+        upsert_stmt = insert(cls).values(**attrs).on_conflict_do_update(index_elements=upsert_keys, set_=attrs)
+        DBSession().execute(upsert_stmt)
+        DBSession().flush()
+
+        # FIXME
+        return cls.query_by_kwargs(**{k: v for k, v in attrs.items() if k in upsert_keys}).first().update(**attrs)
 
     @property
     def json_dict(self):
+        cls = type(self)
         return {
-            k: getattr(self, k) for k in self.columns
+            k: getattr(self, k) for k in cls.columns
         }
 
     def __repr__(self):
