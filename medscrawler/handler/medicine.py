@@ -43,6 +43,3 @@ def import_from_file(path: str) -> None:
         for line in file:
             meds.append(json.loads(line))
     bulk_import(meds)
-
-
-# import_from_file('../../meds_info.jl')
