@@ -31,13 +31,20 @@ db_engine = create_engine(**db_config, echo=True)
 
 def scoped_sessionmaker(engine):
     class Session(_Session):
-        def after_commit(self, func):
+        @staticmethod
+        def _wrap(func):
             @functools.wraps(func)
             def wrapper(*args, **kwargs):
                 kwargs = arg2kwarg(func, args, kwargs)
                 return func(**kwargs)
 
-            event.listens_for(self, 'after_commit', once=True)(wrapper)
+            return wrapper
+
+        def after_commit(self, func):
+            event.listens_for(self, 'after_commit', once=True)(self._wrap(func))
+
+        def after_rollback(self, func):
+            event.listens_for(self, 'after_soft_rollback', once=True)(self._wrap(func))
 
     return scoped_session(
         _sessionmaker(
