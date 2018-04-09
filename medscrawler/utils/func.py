@@ -1,3 +1,4 @@
+import functools
 from inspect import signature
 
 
@@ -15,3 +16,12 @@ def inject_kwarg(func, kwargs, k, v):
     if k in sig.parameters:
         res[k] = v
     return res
+
+
+def adapt(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        kwargs = arg2kwarg(func, args, kwargs)
+        return func(**kwargs)
+
+    return wrapper

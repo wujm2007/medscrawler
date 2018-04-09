@@ -6,6 +6,7 @@ from sqlalchemy import (
     create_engine as _create_engine,
     event,
 )
+from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import (
     Session as _Session,
     sessionmaker as _sessionmaker,
@@ -13,17 +14,19 @@ from sqlalchemy.orm import (
 )
 
 from config import db_config
-from medscrawler.utils.func import arg2kwarg, inject_kwarg
+from medscrawler.utils.func import arg2kwarg, inject_kwarg, adapt
 
 
-def create_engine(user, password, host, port, database, echo=True):
-    return _create_engine('postgresql://{user}:{password}@{host}:{port}/{database}'.format(
-        user=user,
+def create_engine(username, password, host, port, database, echo=True):
+    db_url = URL(
+        drivername='postgres',
+        username=username,
         password=password,
         host=host,
         port=port,
         database=database,
-    ), echo=echo)
+    )
+    return _create_engine(db_url, echo=echo)
 
 
 db_engine = create_engine(**db_config, echo=True)
@@ -31,20 +34,11 @@ db_engine = create_engine(**db_config, echo=True)
 
 def scoped_sessionmaker(engine):
     class Session(_Session):
-        @staticmethod
-        def _wrap(func):
-            @functools.wraps(func)
-            def wrapper(*args, **kwargs):
-                kwargs = arg2kwarg(func, args, kwargs)
-                return func(**kwargs)
-
-            return wrapper
-
         def after_commit(self, func):
-            event.listens_for(self, 'after_commit', once=True)(self._wrap(func))
+            event.listens_for(self, 'after_commit', once=True)(adapt(func))
 
         def after_rollback(self, func):
-            event.listens_for(self, 'after_soft_rollback', once=True)(self._wrap(func))
+            event.listens_for(self, 'after_soft_rollback', once=True)(adapt(func))
 
     return scoped_session(
         _sessionmaker(

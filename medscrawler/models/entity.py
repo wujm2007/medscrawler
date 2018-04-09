@@ -21,11 +21,11 @@ class AutoTableMeta(declarative_meta):
             self.metadata.tables[self.__tablename__].create(db_engine, checkfirst=True)
 
     @property
-    def columns(self):
+    def columns(self) -> list:
         return [c.name for c in self.__table__.columns]
 
     @property
-    def unique_keys(self):
+    def unique_keys(self) -> list:
         table_args = getattr(self, '__table_args__', ())
         return [tuple(a.name for a in ta.columns) for ta in table_args if isinstance(ta, UniqueConstraint)]
 
@@ -70,8 +70,7 @@ class Entity(Base, metaclass=AutoTableMeta):
         return instance
 
     def update(self, **kwargs):
-        cls = type(self)
-        attrs = {k: v for k, v in kwargs.items() if k in cls.columns}
+        attrs = {k: v for k, v in kwargs.items() if k in self.columns}
         for k, v in attrs.items():
             setattr(self, k, v)
         DBSession().add(self)
@@ -97,10 +96,13 @@ class Entity(Base, metaclass=AutoTableMeta):
         return cls.query_by_kwargs(**{k: v for k, v in attrs.items() if k in upsert_keys}).first().update(**attrs)
 
     @property
-    def json_dict(self):
-        cls = type(self)
+    def columns(self) -> list:
+        return type(self).columns
+
+    @property
+    def json_dict(self) -> dict:
         return {
-            k: getattr(self, k) for k in cls.columns
+            k: getattr(self, k) for k in self.columns
         }
 
     def __repr__(self):
