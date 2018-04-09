@@ -1,7 +1,8 @@
 db_config = {
-    'username': 'postgres',
+    'drivername': 'mysql',
+    'username': 'root',
     'password': '123456',
-    'host': 'localhost',
-    'port': 5432,
-    'database': 'postgres'
+    'host': '192.168.50.113',
+    'port': 3306,
+    'database': 'kg'
 }

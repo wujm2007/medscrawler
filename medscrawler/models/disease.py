@@ -1,22 +1,13 @@
 from sqlalchemy import Column, String, Boolean
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.ext.mutable import MutableList
 
 from medscrawler.models.entity import Entity
 
 
 class Disease(Entity):
-    name_cn = Column(String)
-    alias = Column(MutableList.as_mutable(JSONB), default=[], server_default='[]')
-    position = Column(MutableList.as_mutable(JSONB), default=[], server_default='[]')
-    departments = Column(MutableList.as_mutable(JSONB), default=[], server_default='[]')
+    name_cn = Column(String(50))
     infectious = Column(Boolean)
-    cure = Column(String)
-    cure_rate = Column(String)
-    cure_period = Column(String)
-    susceptible_population = Column(String)
-    fee = Column(String)
-    typical_symptoms = Column(MutableList.as_mutable(JSONB), default=[], server_default='[]')
-    clinical_examination = Column(MutableList.as_mutable(JSONB), default=[], server_default='[]')
-    complication = Column(MutableList.as_mutable(JSONB), default=[], server_default='[]')
-    surgery = Column(MutableList.as_mutable(JSONB), default=[], server_default='[]')
+    cure = Column(String(100))
+    cure_rate = Column(String(50))
+    cure_period = Column(String(30))
+    susceptible_population = Column(String(150))
+    fee = Column(String(50))

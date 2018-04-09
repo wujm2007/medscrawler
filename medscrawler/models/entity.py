@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, text, UniqueConstraint
-from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.declarative import declarative_base
 
 from medscrawler.models import DBSession, db_engine
@@ -77,23 +76,24 @@ class Entity(Base, metaclass=AutoTableMeta):
         DBSession().flush()
         return self
 
-    @classmethod
-    def upsert(cls, **kwargs):
-        attrs = {k: v for k, v in kwargs.items() if k in cls.columns}
-
-        for unique_keys in cls.unique_keys:
-            if set(unique_keys) < set(attrs.keys()):
-                upsert_keys = unique_keys
-                break
-        else:
-            raise AttributeError
-
-        upsert_stmt = insert(cls).values(**attrs).on_conflict_do_update(index_elements=upsert_keys, set_=attrs)
-        DBSession().execute(upsert_stmt)
-        DBSession().flush()
-
-        # FIXME
-        return cls.query_by_kwargs(**{k: v for k, v in attrs.items() if k in upsert_keys}).first().update(**attrs)
+    # TODO: MySQL upsert
+    # @classmethod
+    # def upsert(cls, **kwargs):
+    #     attrs = {k: v for k, v in kwargs.items() if k in cls.columns}
+    #
+    #     for unique_keys in cls.unique_keys:
+    #         if set(unique_keys) < set(attrs.keys()):
+    #             upsert_keys = unique_keys
+    #             break
+    #     else:
+    #         raise AttributeError
+    #
+    #     upsert_stmt = insert(cls).values(**attrs).on_conflict_do_update(index_elements=upsert_keys, set_=attrs)
+    #     DBSession().execute(upsert_stmt)
+    #     DBSession().flush()
+    #
+    #     # FIXME
+    #     return cls.query_by_kwargs(**{k: v for k, v in attrs.items() if k in upsert_keys}).first().update(**attrs)
 
     @property
     def columns(self) -> list:
