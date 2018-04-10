@@ -13,11 +13,11 @@ def parse_name(name_str: str) -> tuple:
 
 
 @transactional
-def bulk_import(meds: list, session) -> None:
+def bulk_import(meds: list) -> None:
     for med in meds:
         for _, med_info in med.items():
             name_cn, name_en = parse_name(med_info.get('药品名称', ''))
-            med_instance = Medicine(
+            Medicine.add(
                 name_cn=name_cn,
                 name_en=name_en,
                 ingredients=med_info.get('成份'),
@@ -34,7 +34,6 @@ def bulk_import(meds: list, session) -> None:
                 license_number=med_info.get('批准文号'),
                 manufacturer=med_info.get('生产企业'),
             )
-            session.add(med_instance)
 
 
 def import_from_file(path: str) -> None:

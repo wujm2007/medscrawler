@@ -7,18 +7,17 @@ from medscrawler.models.medicine import Medicine
 
 
 @transactional
-def bulk_import(objs: list, session) -> None:
+def bulk_import(objs: list) -> None:
     for obj in objs:
         for name, info in obj.items():
             for med in info.get('meds', []):
                 disease = Disease.query_by_kwargs(name_cn=name).first()
                 medicine = Medicine.query_by_kwargs(name_cn=med).first()
                 if disease and medicine:
-                    instance = Cure(
+                    Cure.add(
                         disease_id=disease.id,
                         medicine_id=medicine.id
                     )
-                    session.add(instance)
 
 
 def import_from_file(path: str) -> None:
