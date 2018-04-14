@@ -1,0 +1,578 @@
+@prefix map: <#> .
+@prefix db: <> .
+@prefix vocab: <vocab/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix jdbc: <http://d2rq.org/terms/jdbc/> .
+@prefix : <http://www.medicine-kg.com#> .
+
+map:database a d2rq:Database;
+	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
+	d2rq:jdbcDSN "jdbc:mysql://localhost:3306/kg";
+	d2rq:username "root";
+	d2rq:password "123456";
+	jdbc:zeroDateTimeBehavior "convertToNull";
+	jdbc:autoReconnect "true";
+	.
+
+# Table tb_cure
+map:tb_cure a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_cure/@@tb_cure.id@@";
+	d2rq:class :cure;
+	d2rq:classDefinitionLabel "tb_cure";
+	.
+map:tb_cure__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_cure;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_cure #@@tb_cure.id@@";
+	.
+map:tb_cure_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_cure;
+	d2rq:property :cure_id;
+	d2rq:propertyDefinitionLabel "tb_cure id";
+	d2rq:column "tb_cure.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_cure_medicine_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_cure;
+	d2rq:property :cure_medicine_id;
+	d2rq:refersToClassMap map:tb_medicine;
+	d2rq:join "tb_cure.medicine_id => tb_medicine.id";
+	.
+map:tb_cure_disease_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_cure;
+	d2rq:property :cure_disease_id;
+	d2rq:refersToClassMap map:tb_disease;
+	d2rq:join "tb_cure.disease_id => tb_disease.id";
+	.
+
+# Table tb_department
+map:tb_department a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_department/@@tb_department.id@@";
+	d2rq:class :department;
+	d2rq:classDefinitionLabel "tb_department";
+	.
+map:tb_department__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_department;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_department #@@tb_department.id@@";
+	.
+map:tb_department_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_department;
+	d2rq:property :department_id;
+	d2rq:propertyDefinitionLabel "tb_department id";
+	d2rq:column "tb_department.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_department_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_department;
+	d2rq:property :department_name;
+	d2rq:propertyDefinitionLabel "tb_department name";
+	d2rq:column "tb_department.name";
+	.
+
+# Table tb_disease
+map:tb_disease a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_disease/@@tb_disease.id@@";
+	d2rq:class :disease;
+	d2rq:classDefinitionLabel "tb_disease";
+	.
+map:tb_disease__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_disease #@@tb_disease.id@@";
+	.
+map:tb_disease_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease;
+	d2rq:property :disease_id;
+	d2rq:propertyDefinitionLabel "tb_disease id";
+	d2rq:column "tb_disease.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_disease_name_cn a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease;
+	d2rq:property :disease_name_cn;
+	d2rq:propertyDefinitionLabel "tb_disease name_cn";
+	d2rq:column "tb_disease.name_cn";
+	.
+map:tb_disease_infectious a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease;
+	d2rq:property :disease_infectious;
+	d2rq:propertyDefinitionLabel "tb_disease infectious";
+	d2rq:column "tb_disease.infectious";
+	d2rq:datatype xsd:boolean;
+	.
+map:tb_disease_cure a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease;
+	d2rq:property :disease_cure;
+	d2rq:propertyDefinitionLabel "tb_disease cure";
+	d2rq:column "tb_disease.cure";
+	.
+map:tb_disease_cure_rate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease;
+	d2rq:property :disease_cure_rate;
+	d2rq:propertyDefinitionLabel "tb_disease cure_rate";
+	d2rq:column "tb_disease.cure_rate";
+	.
+map:tb_disease_cure_period a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease;
+	d2rq:property :disease_cure_period;
+	d2rq:propertyDefinitionLabel "tb_disease cure_period";
+	d2rq:column "tb_disease.cure_period";
+	.
+map:tb_disease_susceptible_population a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease;
+	d2rq:property :disease_susceptible_population;
+	d2rq:propertyDefinitionLabel "tb_disease susceptible_population";
+	d2rq:column "tb_disease.susceptible_population";
+	.
+map:tb_disease_fee a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease;
+	d2rq:property :disease_fee;
+	d2rq:propertyDefinitionLabel "tb_disease fee";
+	d2rq:column "tb_disease.fee";
+	.
+
+# Table tb_disease_alias
+map:tb_disease_alias a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_disease_alias/@@tb_disease_alias.id@@";
+	d2rq:class :disease_alias;
+	d2rq:classDefinitionLabel "tb_disease_alias";
+	.
+map:tb_disease_alias__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_alias;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_disease_alias #@@tb_disease_alias.id@@";
+	.
+map:tb_disease_alias_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_alias;
+	d2rq:property :disease_alias_id;
+	d2rq:propertyDefinitionLabel "tb_disease_alias id";
+	d2rq:column "tb_disease_alias.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_disease_alias_alias a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_alias;
+	d2rq:property :disease_alias_alias;
+	d2rq:propertyDefinitionLabel "tb_disease_alias alias";
+	d2rq:column "tb_disease_alias.alias";
+	.
+map:tb_disease_alias_disease_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_alias;
+	d2rq:property :disease_alias_disease_id;
+	d2rq:refersToClassMap map:tb_disease;
+	d2rq:join "tb_disease_alias.disease_id => tb_disease.id";
+	.
+
+# Table tb_disease_complication
+map:tb_disease_complication a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_disease_complication/@@tb_disease_complication.id@@";
+	d2rq:class :disease_complication;
+	d2rq:classDefinitionLabel "tb_disease_complication";
+	.
+map:tb_disease_complication__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_complication;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_disease_complication #@@tb_disease_complication.id@@";
+	.
+map:tb_disease_complication_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_complication;
+	d2rq:property :disease_complication_id;
+	d2rq:propertyDefinitionLabel "tb_disease_complication id";
+	d2rq:column "tb_disease_complication.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_disease_complication_disease_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_complication;
+	d2rq:property :disease_complication_disease_id;
+	d2rq:refersToClassMap map:tb_disease;
+	d2rq:join "tb_disease_complication.disease_id => tb_disease.id";
+	.
+map:tb_disease_complication_complication_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_complication;
+	d2rq:property :disease_complication_complication_id;
+	d2rq:refersToClassMap map:tb_disease;
+	d2rq:join "tb_disease_complication.complication_id => tb_disease.id";
+	.
+
+# Table tb_disease_department
+map:tb_disease_department a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_disease_department/@@tb_disease_department.id@@";
+	d2rq:class :disease_department;
+	d2rq:classDefinitionLabel "tb_disease_department";
+	.
+map:tb_disease_department__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_department;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_disease_department #@@tb_disease_department.id@@";
+	.
+map:tb_disease_department_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_department;
+	d2rq:property :disease_department_id;
+	d2rq:propertyDefinitionLabel "tb_disease_department id";
+	d2rq:column "tb_disease_department.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_disease_department_disease_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_department;
+	d2rq:property :disease_department_disease_id;
+	d2rq:refersToClassMap map:tb_disease;
+	d2rq:join "tb_disease_department.disease_id => tb_disease.id";
+	.
+map:tb_disease_department_department_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_department;
+	d2rq:property :disease_department_department_id;
+	d2rq:refersToClassMap map:tb_department;
+	d2rq:join "tb_disease_department.department_id => tb_department.id";
+	.
+
+# Table tb_disease_examination
+map:tb_disease_examination a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_disease_examination/@@tb_disease_examination.id@@";
+	d2rq:class :disease_examination;
+	d2rq:classDefinitionLabel "tb_disease_examination";
+	.
+map:tb_disease_examination__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_examination;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_disease_examination #@@tb_disease_examination.id@@";
+	.
+map:tb_disease_examination_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_examination;
+	d2rq:property :disease_examination_id;
+	d2rq:propertyDefinitionLabel "tb_disease_examination id";
+	d2rq:column "tb_disease_examination.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_disease_examination_examination_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_examination;
+	d2rq:property :disease_examination_examination_id;
+	d2rq:refersToClassMap map:tb_examination;
+	d2rq:join "tb_disease_examination.examination_id => tb_examination.id";
+	.
+map:tb_disease_examination_disease_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_examination;
+	d2rq:property :disease_examination_disease_id;
+	d2rq:refersToClassMap map:tb_disease;
+	d2rq:join "tb_disease_examination.disease_id => tb_disease.id";
+	.
+
+# Table tb_disease_position
+map:tb_disease_position a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_disease_position/@@tb_disease_position.id@@";
+	d2rq:class :disease_position;
+	d2rq:classDefinitionLabel "tb_disease_position";
+	.
+map:tb_disease_position__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_position;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_disease_position #@@tb_disease_position.id@@";
+	.
+map:tb_disease_position_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_position;
+	d2rq:property :disease_position_id;
+	d2rq:propertyDefinitionLabel "tb_disease_position id";
+	d2rq:column "tb_disease_position.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_disease_position_position_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_position;
+	d2rq:property :disease_position_position_id;
+	d2rq:refersToClassMap map:tb_position;
+	d2rq:join "tb_disease_position.position_id => tb_position.id";
+	.
+map:tb_disease_position_disease_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_position;
+	d2rq:property :disease_position_disease_id;
+	d2rq:refersToClassMap map:tb_disease;
+	d2rq:join "tb_disease_position.disease_id => tb_disease.id";
+	.
+
+# Table tb_disease_surgery
+map:tb_disease_surgery a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_disease_surgery/@@tb_disease_surgery.id@@";
+	d2rq:class :disease_surgery;
+	d2rq:classDefinitionLabel "tb_disease_surgery";
+	.
+map:tb_disease_surgery__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_surgery;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_disease_surgery #@@tb_disease_surgery.id@@";
+	.
+map:tb_disease_surgery_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_surgery;
+	d2rq:property :disease_surgery_id;
+	d2rq:propertyDefinitionLabel "tb_disease_surgery id";
+	d2rq:column "tb_disease_surgery.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_disease_surgery_surgery_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_surgery;
+	d2rq:property :disease_surgery_surgery_id;
+	d2rq:refersToClassMap map:tb_surgery;
+	d2rq:join "tb_disease_surgery.surgery_id => tb_surgery.id";
+	.
+map:tb_disease_surgery_disease_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_surgery;
+	d2rq:property :disease_surgery_disease_id;
+	d2rq:refersToClassMap map:tb_disease;
+	d2rq:join "tb_disease_surgery.disease_id => tb_disease.id";
+	.
+
+# Table tb_disease_symptom
+map:tb_disease_symptom a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_disease_symptom/@@tb_disease_symptom.id@@";
+	d2rq:class :disease_symptom;
+	d2rq:classDefinitionLabel "tb_disease_symptom";
+	.
+map:tb_disease_symptom__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_symptom;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_disease_symptom #@@tb_disease_symptom.id@@";
+	.
+map:tb_disease_symptom_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_symptom;
+	d2rq:property :disease_symptom_id;
+	d2rq:propertyDefinitionLabel "tb_disease_symptom id";
+	d2rq:column "tb_disease_symptom.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_disease_symptom_symptom_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_symptom;
+	d2rq:property :disease_symptom_symptom_id;
+	d2rq:refersToClassMap map:tb_symptom;
+	d2rq:join "tb_disease_symptom.symptom_id => tb_symptom.id";
+	.
+map:tb_disease_symptom_disease_id__ref a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_disease_symptom;
+	d2rq:property :disease_symptom_disease_id;
+	d2rq:refersToClassMap map:tb_disease;
+	d2rq:join "tb_disease_symptom.disease_id => tb_disease.id";
+	.
+
+# Table tb_examination
+map:tb_examination a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_examination/@@tb_examination.id@@";
+	d2rq:class :examination;
+	d2rq:classDefinitionLabel "tb_examination";
+	.
+map:tb_examination__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_examination;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_examination #@@tb_examination.id@@";
+	.
+map:tb_examination_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_examination;
+	d2rq:property :examination_id;
+	d2rq:propertyDefinitionLabel "tb_examination id";
+	d2rq:column "tb_examination.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_examination_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_examination;
+	d2rq:property :examination_name;
+	d2rq:propertyDefinitionLabel "tb_examination name";
+	d2rq:column "tb_examination.name";
+	.
+
+# Table tb_medicine
+map:tb_medicine a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_medicine/@@tb_medicine.id@@";
+	d2rq:class :medicine;
+	d2rq:classDefinitionLabel "tb_medicine";
+	.
+map:tb_medicine__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_medicine #@@tb_medicine.id@@";
+	.
+map:tb_medicine_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_id;
+	d2rq:propertyDefinitionLabel "tb_medicine id";
+	d2rq:column "tb_medicine.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_medicine_name_cn a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_name_cn;
+	d2rq:propertyDefinitionLabel "tb_medicine name_cn";
+	d2rq:column "tb_medicine.name_cn";
+	.
+map:tb_medicine_name_en a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_name_en;
+	d2rq:propertyDefinitionLabel "tb_medicine name_en";
+	d2rq:column "tb_medicine.name_en";
+	.
+map:tb_medicine_ingredients a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_ingredients;
+	d2rq:propertyDefinitionLabel "tb_medicine ingredients";
+	d2rq:column "tb_medicine.ingredients";
+	.
+map:tb_medicine_indications a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_indications;
+	d2rq:propertyDefinitionLabel "tb_medicine indications";
+	d2rq:column "tb_medicine.indications";
+	.
+map:tb_medicine_usage a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_usage;
+	d2rq:propertyDefinitionLabel "tb_medicine usage";
+	d2rq:column "tb_medicine.usage";
+	.
+map:tb_medicine_unusual_reactions a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_unusual_reactions;
+	d2rq:propertyDefinitionLabel "tb_medicine unusual_reactions";
+	d2rq:column "tb_medicine.unusual_reactions";
+	.
+map:tb_medicine_contraindication a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_contraindication;
+	d2rq:propertyDefinitionLabel "tb_medicine contraindication";
+	d2rq:column "tb_medicine.contraindication";
+	.
+map:tb_medicine_special_use a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_special_use;
+	d2rq:propertyDefinitionLabel "tb_medicine special_use";
+	d2rq:column "tb_medicine.special_use";
+	.
+map:tb_medicine_storage a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_storage;
+	d2rq:propertyDefinitionLabel "tb_medicine storage";
+	d2rq:column "tb_medicine.storage";
+	.
+map:tb_medicine_note a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_note;
+	d2rq:propertyDefinitionLabel "tb_medicine note";
+	d2rq:column "tb_medicine.note";
+	.
+map:tb_medicine_drug_interaction a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_drug_interaction;
+	d2rq:propertyDefinitionLabel "tb_medicine drug_interaction";
+	d2rq:column "tb_medicine.drug_interaction";
+	.
+map:tb_medicine_pharmacological_action a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_pharmacological_action;
+	d2rq:propertyDefinitionLabel "tb_medicine pharmacological_action";
+	d2rq:column "tb_medicine.pharmacological_action";
+	.
+map:tb_medicine_expire_date a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_expire_date;
+	d2rq:propertyDefinitionLabel "tb_medicine expire_date";
+	d2rq:column "tb_medicine.expire_date";
+	.
+map:tb_medicine_license_number a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_license_number;
+	d2rq:propertyDefinitionLabel "tb_medicine license_number";
+	d2rq:column "tb_medicine.license_number";
+	.
+map:tb_medicine_manufacturer a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_medicine;
+	d2rq:property :medicine_manufacturer;
+	d2rq:propertyDefinitionLabel "tb_medicine manufacturer";
+	d2rq:column "tb_medicine.manufacturer";
+	.
+
+# Table tb_position
+map:tb_position a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_position/@@tb_position.id@@";
+	d2rq:class :position;
+	d2rq:classDefinitionLabel "tb_position";
+	.
+map:tb_position__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_position;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_position #@@tb_position.id@@";
+	.
+map:tb_position_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_position;
+	d2rq:property :position_id;
+	d2rq:propertyDefinitionLabel "tb_position id";
+	d2rq:column "tb_position.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_position_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_position;
+	d2rq:property :position_name;
+	d2rq:propertyDefinitionLabel "tb_position name";
+	d2rq:column "tb_position.name";
+	.
+
+# Table tb_surgery
+map:tb_surgery a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_surgery/@@tb_surgery.id@@";
+	d2rq:class :surgery;
+	d2rq:classDefinitionLabel "tb_surgery";
+	.
+map:tb_surgery__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_surgery;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_surgery #@@tb_surgery.id@@";
+	.
+map:tb_surgery_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_surgery;
+	d2rq:property :surgery_id;
+	d2rq:propertyDefinitionLabel "tb_surgery id";
+	d2rq:column "tb_surgery.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_surgery_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_surgery;
+	d2rq:property :surgery_name;
+	d2rq:propertyDefinitionLabel "tb_surgery name";
+	d2rq:column "tb_surgery.name";
+	.
+
+# Table tb_symptom
+map:tb_symptom a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "tb_symptom/@@tb_symptom.id@@";
+	d2rq:class :symptom;
+	d2rq:classDefinitionLabel "tb_symptom";
+	.
+map:tb_symptom__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_symptom;
+	d2rq:property rdfs:label;
+	d2rq:pattern "tb_symptom #@@tb_symptom.id@@";
+	.
+map:tb_symptom_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_symptom;
+	d2rq:property :symptom_id;
+	d2rq:propertyDefinitionLabel "tb_symptom id";
+	d2rq:column "tb_symptom.id";
+	d2rq:datatype xsd:integer;
+	.
+map:tb_symptom_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:tb_symptom;
+	d2rq:property :symptom_name;
+	d2rq:propertyDefinitionLabel "tb_symptom name";
+	d2rq:column "tb_symptom.name";
+	.
+
