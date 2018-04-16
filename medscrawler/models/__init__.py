@@ -17,7 +17,7 @@ from config import db_config
 from medscrawler.utils.func import arg2kwarg, inject_kwarg, adapt
 
 
-def create_engine(username, password, host, port, database, drivername='postgres', echo=True):
+def create_engine(username, password, host, port, database, drivername='postgres', echo=True, **kwargs):
     db_url = URL(
         drivername=drivername,
         username=username,
@@ -25,6 +25,7 @@ def create_engine(username, password, host, port, database, drivername='postgres
         host=host,
         port=port,
         database=database,
+        query=kwargs,
     )
     return _create_engine(db_url, echo=echo)
 
