@@ -12,6 +12,19 @@ class AutoTableMeta(declarative_meta):
     def __new__(cls, classname, bases, dict_):
         if '__tablename__' not in dict_ and not dict_.get('__abstract__', False):
             dict_['__tablename__'] = 'tb_{}'.format(decamelize(classname))
+
+        # set charset
+        dict_['__table_args__'] = dict_.get('__table_args__', {})
+        mysql_ta = {
+            'mysql_engine': 'InnoDB',
+            'mysql_charset': 'utf8',
+            'mysql_collate': 'utf8_general_ci',
+        }
+        if isinstance(dict_['__table_args__'], dict):
+            dict_['__table_args__'].update(mysql_ta)
+        else:
+            dict_['__table_args__'] = (*dict_['__table_args__'], mysql_ta)
+
         return super().__new__(cls, classname, bases, dict_)
 
     def __init__(self, classname, bases, dict_):
