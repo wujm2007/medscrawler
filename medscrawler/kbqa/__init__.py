@@ -16,3 +16,6 @@ def suggest_freq(segment: tuple, tune: bool = True):
 
 def parse(sentence: str) -> list:
     return [Word(word, tag) for word, tag in _cut(sentence)]
+
+
+load_userdict("./meds_dict.txt")

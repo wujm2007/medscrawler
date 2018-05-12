@@ -1,3 +1,4 @@
+from config import DEBUG
 from medscrawler.kbqa import parse
 from medscrawler.kbqa.words import Positions
 
@@ -45,6 +46,11 @@ class QuestionSet:
 
 def get_sparql(question: str) -> str:
     word_objects = parse(question)
+
+    if DEBUG:
+        for word in word_objects:
+            print(word)
+
     result_q, matches = None, -1
 
     from medscrawler.kbqa.rules import rules

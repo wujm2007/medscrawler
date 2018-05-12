@@ -7,3 +7,5 @@ db_config = {
     'database': 'kg',
     'charset': 'utf8',
 }
+
+DEBUG = True

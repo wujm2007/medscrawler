@@ -22,8 +22,8 @@ class Rule(object):
 
 rules = [
     Rule(
-        condition_num=2,
-        condition=Words.WORD_DISEASE + Star(Any(), greedy=False) + Words.WORD_MEDICINE + Star(Any(), greedy=False),
+        condition_num=1,
+        condition=Words.WORD_DISEASE + Star(Any(), greedy=False) + Words.WORD_ASK + Star(Any(), greedy=False),
         action=QuestionSet.medicine_for_disease,
     ),
 ]

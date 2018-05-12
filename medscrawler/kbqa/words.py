@@ -16,11 +16,11 @@ class W(Predicate):
 
 
 class Positions:
-    POS_DISEASE = "nr"
-    POS_MEDICINE = "v"
+    POS_DISEASE = "n"
+    POS_MEDICINE = "nz"
 
 
 class Words:
     WORD_DISEASE = W(pos=Positions.POS_DISEASE)
     WORD_MEDICINE = W(pos=Positions.POS_MEDICINE)
-    MEDICINE = W("药")
+    WORD_ASK = (W("怎么办") | W("怎么") | W('什么'))
