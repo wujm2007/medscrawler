@@ -50,10 +50,11 @@ class DiseaseDetailSpider(scrapy.Spider):
 
         # 防止被反爬虫
         if not med_name:
-            yield scrapy.Request(url=response.url, callback=self.parse, dont_filter=True, headers={
-                'Referer': self.referer,
-                'User-Agent': random.choice(self.USER_AGENTS),
-            })
+            pass
+            # yield scrapy.Request(url=response.url, callback=self.parse, dont_filter=True, headers={
+            #     'Referer': self.referer,
+            #     'User-Agent': random.choice(self.USER_AGENTS),
+            # })
         else:
             yield {
                 name: {

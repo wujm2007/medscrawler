@@ -70,10 +70,11 @@ class MedsInfoSpider(scrapy.Spider):
 
         # 防止被反爬虫
         if not trimmed:
-            yield scrapy.Request(url=response.url, callback=self.parse, dont_filter=True, headers={
-                'Referer': self.referer,
-                'User-Agent': random.choice(self.USER_AGENTS),
-            })
+            pass
+            # yield scrapy.Request(url=response.url, callback=self.parse, dont_filter=True, headers={
+            #     'Referer': self.referer,
+            #     'User-Agent': random.choice(self.USER_AGENTS),
+            # })
         else:
             yield {
                 med: parsed

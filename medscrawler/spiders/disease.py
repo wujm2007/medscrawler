@@ -41,7 +41,7 @@ class DiseaseSpider(scrapy.Spider):
         keys = response.css('.types div.typecon ul li a::text').extract()
         paths = response.css('.types div.typecon ul li a::attr(href)').extract()
 
-        # 防止被反爬虫
+        # 重新请求，防止被反爬虫规则命中而缺少该条数据
         if not keys:
             yield scrapy.Request(url=response.url, callback=self.parse, dont_filter=True, headers={
                 'Referer': self.referer,
@@ -53,3 +53,4 @@ class DiseaseSpider(scrapy.Spider):
                     k: self.host + p for k, p in zip(keys, paths)
                 }
             }
+
