@@ -42,3 +42,9 @@ def import_from_file(path: str) -> None:
         for line in file:
             meds.append(json.loads(line))
     bulk_import(meds)
+
+
+def dump_dict(path: str) -> None:
+    with open(path, 'w', encoding='utf-8') as file:
+        for disease in Medicine.all():
+            file.write("{} nz\n".format(disease.name_cn))
