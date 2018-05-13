@@ -1,0 +1,27 @@
+@prefix : <http://www.medicine-kg.com#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.medicine-kg.com> .
+
+<http://www.medicine-kg.com> rdf:type owl:Ontology .
+
+:cure_disease_id rdf:type owl:ObjectProperty ;
+	rdfs:domain :medicine ;
+	rdfs:range :disease .
+
+:cures rdf:type owl:ObjectProperty ;
+        owl:sameAs :cure_disease_id ;
+	rdfs:domain :medicine ;
+	rdfs:range :disease .
+
+:cured rdf:type owl:ObjectProperty ;
+        owl:inverseOf :cures ;
+	rdfs:domain :disease ;
+	rdfs:range :medicine .
+
+:disease rdf:type owl:Class .
+
+:medicine rdf:type owl:Class .

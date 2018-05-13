@@ -1,0 +1,8 @@
+@prefix : <http://www.medicine-kg.com#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <XML Schema> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+[ruleCures: (?m :cure_disease_id ?d) (?d :disease_name_cn ?nd)-> (?m :cures ?nd)]
+[ruleCured: (?m :cure_disease_id ?d) (?n :medicine_name_cn ?nm)-> (?d :cured ?nm)]
