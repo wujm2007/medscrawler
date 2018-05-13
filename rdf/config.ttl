@@ -1,0 +1,33 @@
+@prefix :        <#> .
+@prefix fuseki:  <http://jena.apache.org/fuseki#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix tdb:     <http://jena.hpl.hp.com/2008/tdb#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+
+<#service>  rdf:type fuseki:Service ;
+    fuseki:name              "kg" ;
+    fuseki:serviceQuery      "sparql" ;       
+    fuseki:dataset           <#dataset> ;
+    .
+
+<#dataset> rdf:type       ja:RDFDataset ;
+    ja:defaultGraph       <#model_inf> ;
+    # tdb:unionDefaultGraph true ;
+    .
+
+<#model_inf> a ja:InfModel ;
+     ja:baseModel <#tdbGraph> ;
+     
+     ja:content [ja:externalContent <file:///home/james/Developer/medscrawler/rdf/ontology.ttl> ] ;
+    
+     ja:reasoner [ja:reasonerURL <http://jena.hpl.hp.com/2003/OWLFBRuleReasoner>] .
+     
+<#tdbDataset> rdf:type tdb:DatasetTDB ;
+    tdb:location "/home/james/Developer/medscrawler/tdb" ;
+    .
+
+<#tdbGraph> rdf:type tdb:GraphTDB ;
+    tdb:dataset <#tdbDataset> ;  
+    .
