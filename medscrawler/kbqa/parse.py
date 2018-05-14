@@ -19,12 +19,9 @@ ASK {{{expression}
 
 
 class QuestionSet:
-    def __init__(self):
-        pass
-
     @staticmethod
     def medicine_for_disease(word_objects):
-        select = "?n"
+        select = "?medicine_name_cn"
 
         for w in word_objects:
             if w.pos == Positions.POS_DISEASE:
@@ -33,7 +30,45 @@ class QuestionSet:
                 ?s :disease_name_cn '{}'.
                 ?o :cure_disease_id ?s.
                 ?o :cure_medicine_id ?m.
-                ?m :medicine_name_cn ?n. """.format(w.token)
+                ?m :medicine_name_cn ?medicine_name_cn. """.format(w.token)
+
+                sparql = SPARQL_SELECT_STMT.format(
+                    prefix=SPARQL_PREFIX,
+                    select=select,
+                    expression=e,
+                )
+                return sparql
+        return
+
+    @staticmethod
+    def medicine_info(word_objects):
+        select = "?s ?p ?o"
+
+        for w in word_objects:
+            if w.pos == Positions.POS_MEDICINE:
+                e = """
+                ?s rdf:type :medicine.
+                ?s :medicine_name_cn '{}'.
+                ?s ?p ?o. """.format(w.token)
+
+                sparql = SPARQL_SELECT_STMT.format(
+                    prefix=SPARQL_PREFIX,
+                    select=select,
+                    expression=e,
+                )
+                return sparql
+        return
+
+    @staticmethod
+    def disease_info(word_objects):
+        select = "?s ?p ?o"
+
+        for w in word_objects:
+            if w.pos == Positions.POS_DISEASE:
+                e = """
+                ?s rdf:type :disease.
+                ?s :disease_name_cn '{}'.
+                ?s ?p ?o. """.format(w.token)
 
                 sparql = SPARQL_SELECT_STMT.format(
                     prefix=SPARQL_PREFIX,

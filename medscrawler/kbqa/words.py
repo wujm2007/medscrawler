@@ -24,3 +24,4 @@ class Words:
     WORD_DISEASE = W(pos=Positions.POS_DISEASE)
     WORD_MEDICINE = W(pos=Positions.POS_MEDICINE)
     WORD_ASK = (W("怎么办") | W("怎么") | W('什么'))
+    WORD_IS = W("是")

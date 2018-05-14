@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello KBQA!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script defer src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script defer src="static/index.js"> </script>
+  </head>
+  <body>
+  <section class="section"  id="app">
+    <div class="bd-index-custom-example">
+            <h1 class="title">
+              KBQA
+            </h1>
+            <p class="subtitle">
+              输入您的问题：（例如，“骨折是什么？”）
+            </p>
+
+            <div class="columns">
+              <div class="field column">
+                <div class="control">
+                  <input class="input" type="text" placeholder="骨折是什么" v-model="message">
+                </div>
+              </div>
+              <div class="buttons column">
+                <a class="button is-primary" v-on:click="query">查询</a>
+              </div>
+
+            </div>
+          </div>
+          
+    <div class="table-container">
+
+
+
+      <table class="table is-bordered">
+
+        <tbody>
+          
+            <tr v-for="(value, key) in result">
+              <td>
+                {{key}}
+              </td>
+              <td>
+                {{value}}
+              </td>
+            </tr>
+          
+        </tbody>
+      </table>
+    </div>
+
+
+  </section>
+
+
+  </body>
+</html>

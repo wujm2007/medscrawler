@@ -4,12 +4,11 @@ from medscrawler.kbqa.parse import QuestionSet
 from medscrawler.kbqa.words import Words
 
 
-class Rule(object):
-    def __init__(self, condition_num, condition=None, action=None):
-        assert condition and action
+class Rule:
+    def __init__(self, condition_num, condition, action):
+        self.condition_num = condition_num
         self.condition = condition
         self.action = action
-        self.condition_num = condition_num
 
     def apply(self, sentence):
         matches = []
@@ -21,6 +20,16 @@ class Rule(object):
 
 
 rules = [
+    Rule(
+        condition_num=1,
+        condition=Words.WORD_DISEASE + Words.WORD_IS + Words.WORD_ASK + Star(Any(), greedy=False),
+        action=QuestionSet.disease_info,
+    ),
+    Rule(
+        condition_num=1,
+        condition=Words.WORD_MEDICINE + Words.WORD_IS + Words.WORD_ASK + Star(Any(), greedy=False),
+        action=QuestionSet.medicine_info,
+    ),
     Rule(
         condition_num=1,
         condition=Words.WORD_DISEASE + Star(Any(), greedy=False) + Words.WORD_ASK + Star(Any(), greedy=False),
