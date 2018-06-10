@@ -1,5 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 
+from medscrawler.kbqa.parse import SPARQL_SELECT_STMT, SPARQL_PREFIX
+
 
 def request(query: str, endpoint="http://localhost:3030/kg/sparql") -> tuple:
     sparql = SPARQLWrapper(endpoint)
@@ -35,13 +37,45 @@ KEY_MAPPING = {
 }
 
 
-def key_mapping(d: dict) -> dict:
-    def _map(k: str) -> str:
-        k_ = k.split('#')[-1]
-        return KEY_MAPPING.get(k_)
+def get_name(name_, id_):
+    exp = f"""
+        ?s rdf:type :{name_[3:]}.
+        ?s :{name_[3:]}_id {id_}.
+        ?s :{name_[3:]}_name ?name. """
+    stmt = SPARQL_SELECT_STMT.format(
+        prefix=SPARQL_PREFIX,
+        select='?name',
+        expression=exp,
+    )
+    # print(stmt)
+    res = request(stmt)[1]
+    for r in res:
+        return [r_ for r_ in r][-1]
+    return res
 
-    print(d)
-    return {_map(k): v for k, v in d.items() if _map(k)}
+
+def key_mapping(d: dict) -> dict:
+    def _map(k: str, v: str) -> tuple:
+        k_ = k.split('#')[-1]
+        if not k_:
+            return None, None
+        v_ = v
+        if 'file' in v:
+            n_ = v.split('#')[-1]
+            n_, id_ = n_.split('/')
+            v_ = get_name(n_, id_)
+
+        return KEY_MAPPING.get(k_), v_
+
+    res = {}
+    for k, v in d.items():
+        k_, v_ = _map(k, v)
+        if k_ and v_:
+            if k_ not in res:
+                res[k_] = [v_]
+            else:
+                res[k_].append(v_)
+    return {k: v if len(v) != 1 else v[-1] for k, v in res.items()}
 
 
 def res_format(vars_: list, bindings_: list) -> dict:
@@ -52,4 +86,5 @@ def res_format(vars_: list, bindings_: list) -> dict:
         return key_mapping({vars_[0]: ','.join([v[0] for v in bindings_])})
     else:
         bindings_ = bindings_[:]
-        return key_mapping({v[1]: v[2] for v in bindings_})
+        mapped = key_mapping({v[1]: v[2] for v in bindings_})
+        return mapped
