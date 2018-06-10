@@ -1,0 +1,26 @@
+KEY_MAPPING = {
+    'answer': '答案',
+    'medicine_name_cn': '药品名称',
+    'medicine_indications': '作用',
+    'medicine_ingredients': '药品成分',
+    'medicine_manufacturer': '生产厂商',
+    'medicine_contraindication': '禁忌',
+    'medicine_drug_interaction': '药物相互作用',
+    'medicine_unusual_reactions': '不良反应',
+    'medicine_expire_date': '有效期',
+    'medicine_special_use': '特殊使用',
+    'medicine_storage': '贮藏',
+    'medicine_usage': '使用方法',
+    'medicine_note': '说明',
+    'medicine_pharmacological_action': '药理作用',
+    'disease_cure_rate': '治愈率',
+    'disease_cure': '治疗方法',
+    'disease_name_cn': '疾病名称',
+    'disease_susceptible_population': '易感人群',
+    'disease_fee': '治疗费用',
+    'disease_infectious': '传染性',
+    'symptom': '症状',
+    'position': '发病部位',
+}
+
+KEY_MAPPING_INV = {v: k for k, v in KEY_MAPPING.items()}
