@@ -29,9 +29,8 @@ class QuestionSet:
                 e = """
                 ?s rdf:type :disease.
                 ?s :disease_name_cn '{}'.
-                ?o :cure_disease_id ?s.
-                ?o :cure_medicine_id ?m.
-                ?m :medicine_name_cn ?medicine_name_cn. """.format(w.token)
+                ?s :cured ?o.
+                ?o :medicine_name_cn ?medicine_name_cn. """.format(w.token)
 
                 sparql = SPARQL_SELECT_STMT.format(
                     prefix=SPARQL_PREFIX,
