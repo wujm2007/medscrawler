@@ -10,7 +10,7 @@ def query(query: hug.types.text) -> dict:
     if not sparql:
         res = [], []
     else:
-        res = request(sparql, endpoint="http://localhost:3030/med_kg/query")
+        res = request(sparql, endpoint="http://localhost:3030/kg/sparql")
     return res_format(*res)
 
 

@@ -1,7 +1,7 @@
 (stats
   (meta
-    (timestamp "2018-06-10T17:45:28.410+08:00"^^<http://www.w3.org/2001/XMLSchema#dateTime>)
-    (run@ "2018/06/10 17:45:28 CST")
+    (timestamp "2018-06-10T18:33:57.807+08:00"^^<http://www.w3.org/2001/XMLSchema#dateTime>)
+    (run@ "2018/06/10 18:33:57 CST")
     (count 117282))
   ((VAR <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.medicine-kg.com#disease>)
    2440)

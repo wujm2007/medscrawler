@@ -1,7 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 
-def request(query: str, endpoint="http://localhost:3030/med_kg/query") -> tuple:
+def request(query: str, endpoint="http://localhost:3030/kg/sparql") -> tuple:
     sparql = SPARQLWrapper(endpoint)
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
@@ -30,6 +30,8 @@ KEY_MAPPING = {
     'disease_susceptible_population': '易感人群',
     'disease_fee': '治疗费用',
     'disease_infectious': '传染性',
+    'symptom': '症状',
+    'position': '发病部位',
 }
 
 
@@ -49,4 +51,5 @@ def res_format(vars_: list, bindings_: list) -> dict:
     elif len(vars_) == 1:
         return key_mapping({vars_[0]: ','.join([v[0] for v in bindings_])})
     else:
+        bindings_ = bindings_[:]
         return key_mapping({v[1]: v[2] for v in bindings_})
