@@ -8,15 +8,6 @@
 
 <http://www.medicine-kg.com> rdf:type owl:Ontology .
 
-:cure_disease_id rdf:type owl:ObjectProperty ;
-	rdfs:domain :medicine ;
-	rdfs:range :disease .
-
-:cures rdf:type owl:ObjectProperty ;
-        owl:sameAs :cure_disease_id ;
-	rdfs:domain :medicine ;
-	rdfs:range :disease .
-
 :cured rdf:type owl:ObjectProperty ;
         owl:inverseOf :cures ;
 	rdfs:domain :disease ;

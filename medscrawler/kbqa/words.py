@@ -2,6 +2,8 @@ import re
 
 from refo import Predicate
 
+from medscrawler.const import KEY_MAPPING_INV
+
 
 class W(Predicate):
     def __init__(self, token=".*", pos=".*"):
@@ -23,5 +25,10 @@ class Positions:
 class Words:
     WORD_DISEASE = W(pos=Positions.POS_DISEASE)
     WORD_MEDICINE = W(pos=Positions.POS_MEDICINE)
-    WORD_ASK = (W("怎么办") | W("怎么") | W('什么'))
+    specs = list(KEY_MAPPING_INV.keys())
+    WORD_SPEC = W(specs[0])
+    for spec in specs[1:]:
+        WORD_SPEC = WORD_SPEC | W(spec)
+    WORD_ASK = (W("怎么办") | W("怎么") | W('什么') | W('啥'))
+    WORD_OF = (W("的"))
     WORD_IS = W("是")

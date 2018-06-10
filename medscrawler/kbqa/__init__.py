@@ -18,4 +18,4 @@ def parse(sentence: str) -> list:
     return [Word(word, tag) for word, tag in _cut(sentence)]
 
 
-load_userdict("./meds_dict.txt")
+load_userdict("/Users/jameswu/Developer/medscrawler/meds_dict.txt")

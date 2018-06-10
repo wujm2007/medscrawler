@@ -20,12 +20,12 @@
 <#model_inf> a ja:InfModel ;
      ja:baseModel <#tdbGraph> ;
      
-     ja:content [ja:externalContent <file:///home/james/Developer/medscrawler/rdf/ontology.ttl> ] ;
+     ja:content [ja:externalContent <file:///Users/jameswu/Developer/medscrawler/rdf/ontology.ttl> ] ;
     
      ja:reasoner [ja:reasonerURL <http://jena.hpl.hp.com/2003/OWLFBRuleReasoner>] .
      
 <#tdbDataset> rdf:type tdb:DatasetTDB ;
-    tdb:location "/home/james/Developer/medscrawler/tdb" ;
+    tdb:location "/Users/jameswu/Developer/medscrawler/tdb" ;
     .
 
 <#tdbGraph> rdf:type tdb:GraphTDB ;

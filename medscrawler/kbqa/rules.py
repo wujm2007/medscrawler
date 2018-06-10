@@ -35,4 +35,10 @@ rules = [
         condition=Words.WORD_DISEASE + Star(Any(), greedy=False) + Words.WORD_ASK + Star(Any(), greedy=False),
         action=QuestionSet.medicine_for_disease,
     ),
+    Rule(
+        condition_num=2,
+        condition=Words.WORD_DISEASE + Star(Any(), greedy=False) + Words.WORD_OF + Star(Any(), greedy=False) +
+                  Words.WORD_SPEC + Star(Any(), greedy=False),
+        action=QuestionSet.disease_spec,
+    ),
 ]
