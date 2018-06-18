@@ -5,6 +5,7 @@ from medscrawler.kbqa.parse import SPARQL_SELECT_STMT, SPARQL_PREFIX
 
 
 def request(query: str, endpoint="http://localhost:3030/kg/sparql") -> tuple:
+    """发送 SPARQL 查询请求"""
     sparql = SPARQLWrapper(endpoint)
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
@@ -54,6 +55,12 @@ def key_mapping(d: dict) -> dict:
 
 
 def res_format(vars_: list, bindings_: list) -> dict:
+    """
+    将 bindings 转为可读的 json 格式
+    :param vars_:
+    :param bindings_:
+    :return:
+    """
     bindings_ = [list(v) for v in bindings_]
     if not vars_:
         return key_mapping({'answer': "我不知道"})
@@ -61,6 +68,7 @@ def res_format(vars_: list, bindings_: list) -> dict:
         return key_mapping({vars_[0]: ','.join([v[0] for v in bindings_])})
     else:
         bindings_ = bindings_[:]
-        print(bindings_)
+        # print(bindings_)
+        # TODO: multiple value
         mapped = key_mapping({v[-2]: v[-1] for v in bindings_})
         return mapped

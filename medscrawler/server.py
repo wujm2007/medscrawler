@@ -5,8 +5,13 @@ from medscrawler.utils.sparql import request, res_format
 
 
 @hug.get('/query')
-def query(query: hug.types.text) -> dict:
-    sparql = get_sparql(query)
+def query(q: hug.types.text) -> dict:
+    """
+    通过自然语言进行 SPARQL 查询，
+    :param q: 自然语言问题
+    :return: 可读的 JSON 格式数据
+    """
+    sparql = get_sparql(q)
     if not sparql:
         res = [], []
     else:

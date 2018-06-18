@@ -20,21 +20,25 @@ class Rule:
 
 
 rules = [
+    # 【疾病】是什么？
     Rule(
         condition_num=1,
         condition=Words.WORD_DISEASE + Words.WORD_IS + Words.WORD_ASK + Star(Any(), greedy=False),
         action=QuestionSet.disease_info,
     ),
+    # 【药品】是什么？
     Rule(
         condition_num=1,
         condition=Words.WORD_MEDICINE + Words.WORD_IS + Words.WORD_ASK + Star(Any(), greedy=False),
         action=QuestionSet.medicine_info,
     ),
+    # 【疾病】怎么办？
     Rule(
         condition_num=1,
         condition=Words.WORD_DISEASE + Star(Any(), greedy=False) + Words.WORD_ASK + Star(Any(), greedy=False),
         action=QuestionSet.medicine_for_disease,
     ),
+    # 【疾病】的【特性】是什么？
     Rule(
         condition_num=2,
         condition=Words.WORD_DISEASE + Star(Any(), greedy=False) + Words.WORD_OF + Star(Any(), greedy=False) +
